@@ -1,3 +1,15 @@
+/* App.css */
+.App {
+  /* Impede que o container geral capture cliques */
+  -webkit-app-region: drag;
+}
+
+.botao-interativo {
+  /* Permite que o botão capture cliques */
+  -webkit-app-region: no-drag;
+}
+
+
 #root {
   max-width: 1280px;
   margin: 0 auto;

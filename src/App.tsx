@@ -1,36 +1,64 @@
-import { useState } from 'react'
-import UpdateElectron from '@/components/update'
-import logoVite from './assets/logo-vite.svg'
-import logoElectron from './assets/logo-electron.svg'
-import './App.css'
+import React, { useEffect, useState } from 'react'
 
 function App() {
-  const [count, setCount] = useState(0)
-  return (
-    <div className='App'>
-      <div className='logo-box'>
-        <a href='https://github.com/electron-vite/electron-vite-react' target='_blank'>
-          <img src={logoVite} className='logo vite' alt='Electron + Vite logo' />
-          <img src={logoElectron} className='logo electron' alt='Electron + Vite logo' />
-        </a>
-      </div>
-      <h1>Electron + Vite + React</h1>
-      <div className='card'>
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className='read-the-docs'>
-        Click on the Electron + Vite logo to learn more
-      </p>
-      <div className='flex-center'>
-        Place static files into the<code>/public</code> folder <img style={{ width: '5em' }} src='./node.svg' alt='Node logo' />
-      </div>
+  // Inicialmente, definimos o modo transparente
+  const [isTransparent, setIsTransparent] = useState(() => {
+    const savedState = localStorage.getItem('isTransparent')
+    return savedState !== null ? JSON.parse(savedState) : true
+  })
 
-      <UpdateElectron />
+  useEffect(() => {
+    localStorage.setItem('isTransparent', JSON.stringify(isTransparent))
+  }, [isTransparent])
+
+  const handleToggleMode = () => {
+    setIsTransparent(prev => !prev)
+    window.ipcRenderer.invoke('toggle-window-mode').then(() => {
+      // Atualiza o estado; se estava transparente, passa a normal, e vice-versa
+      // setIsTransparent(prev => !prev)
+    })
+  }
+
+  const handleToggleCorner = () => {
+    window.ipcRenderer.invoke('toggle-window-corner')
+  }
+
+  const handleMouseEnter = () => {
+    window.ipcRenderer.invoke('set-ignore-mouse', false)
+  }
+
+  const handleMouseLeave = () => {
+    window.ipcRenderer.invoke('set-ignore-mouse', true && isTransparent)
+  }
+
+  return (
+    <div style={{ WebkitAppRegion: 'drag', width: '100%', height: '100%' , backgroundColor: 'red'}}>
+      <button
+        style={{ WebkitAppRegion: 'no-drag', marginBottom: '1rem' }}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        onClick={() => console.log('Botão click-through clicado')}
+      >
+        Botão Interativo (click-through)
+      </button>
+      <button
+        style={{ WebkitAppRegion: 'no-drag', marginBottom: '1rem' }}
+        onClick={handleToggleMode}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        Alternar para Modo {isTransparent ? 'Normal' : 'Transparente'}
+      </button>
+      {isTransparent && (
+        <button
+          style={{ WebkitAppRegion: 'no-drag' }}
+          onClick={handleToggleCorner}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
+          Alternar posição da janela (canto)
+        </button>
+      )}
     </div>
   )
 }
