@@ -29,7 +29,7 @@ const preload = path.join(__dirname, '../preload/index.mjs')
 const indexHtml = path.join(RENDERER_DIST, 'index.html')
 
 // Variável para controlar o modo atual: 'transparent' ou 'normal'
-let currentMode: 'transparent' | 'normal' = 'transparent'
+let currentMode: 'transparent' | 'normal' = 'normal';
 // Variável para controlar o canto atual da janela no modo transparente
 let currentCorner: 'right' | 'left' = 'right'
 
@@ -54,7 +54,7 @@ function positionWindow(window: BrowserWindow) {
 }
 
 async function createWindow(
-  mode: 'transparent' | 'normal' = 'transparent',
+  mode: 'transparent' | 'normal' = 'normal',
   bounds?: Electron.Rectangle
 ) {
   const isTransparent = mode === 'transparent'
@@ -66,7 +66,11 @@ async function createWindow(
     title: 'Main window',
     transparent: isTransparent,
     alwaysOnTop: alwaysOnTop,
-    frame: frame,
+    frame: false,
+    width: 300,
+    height: 300,
+    minWidth: 300,
+    minHeight: 300,
     icon: path.join(process.env.VITE_PUBLIC, 'favicon.ico'),
     webPreferences: {
       preload,
@@ -89,13 +93,14 @@ async function createWindow(
       // Se o modo for transparente, ativamos o encaminhamento de eventos de mouse
       // win?.setIgnoreMouseEvents(true, { forward: true })
       // Posiciona a janela de acordo com currentCorner
-      positionWindow(win)
-    }
-    else{
+      positionWindow(win);
+    } else if (!isTransparent && !!win) {
       // win?.setIgnoreMouseEvents(false)
+      // Centraliza a janela no modo normal
+      win.center();
     }
-    win?.webContents.send('main-process-message', new Date().toLocaleString())
-  })
+    win?.webContents.send('main-process-message', new Date().toLocaleString());
+  });
 
   win.webContents.setWindowOpenHandler(({ url }) => {
     if (url.startsWith('https:')) shell.openExternal(url)
@@ -159,12 +164,30 @@ ipcMain.handle('set-ignore-mouse', (_, ignore: boolean) => {
 
 // Handler para alternar entre modos: transparente e normal
 ipcMain.handle('toggle-window-mode', async () => {
-  if (!win) return
-  const bounds = win.getBounds()
-  win.destroy()
-  currentMode = currentMode === 'transparent' ? 'normal' : 'transparent'
-  await createWindow(currentMode, bounds)
-})
+  if (!win) return;
+
+  currentMode = currentMode === 'transparent' ? 'normal' : 'transparent';
+  const isTransparent = currentMode === 'transparent';
+
+  win.setOpacity(isTransparent ? 0.9 : 1); // Ajuste a opacidade conforme necessário
+  win.setAlwaysOnTop(isTransparent);
+  win.setIgnoreMouseEvents(isTransparent, { forward: true });
+  win.setResizable(!isTransparent);
+  win.setMovable(!isTransparent);
+  win.setFullScreenable(!isTransparent);
+  win.setHasShadow(!isTransparent);
+
+  if (isTransparent) {
+    win.setBackgroundColor('#00000000'); // Transparente
+    win.setBounds({ ...win.getBounds(), width: 300, height: 300 });
+    positionWindow(win);
+  } else {
+    win.setBackgroundColor('#FFFFFF'); // Cor de fundo padrão
+    win.center();
+  }
+
+  win.webContents.send('main-process-message', new Date().toLocaleString());
+});
 
 // Handler para alternar o canto da janela no modo transparente
 ipcMain.handle('toggle-window-corner', () => {
