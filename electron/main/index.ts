@@ -31,7 +31,7 @@ const indexHtml = path.join(RENDERER_DIST, 'index.html')
 // Variável para controlar o modo atual: 'transparent' ou 'normal'
 let currentMode: 'transparent' | 'normal' = 'normal';
 // Variável para controlar o canto atual da janela no modo transparente
-let currentCorner: 'right' | 'left' = 'right'
+let currentCorner: 'right' | 'left' = 'right';
 
 /**
  * Posiciona a janela no canto inferior, à direita ou esquerda, 
@@ -47,9 +47,12 @@ function positionWindow(window: BrowserWindow) {
     let posX: number
     posX = currentCorner === 'right'
       ? scrX + scrWidth - winWidth
-      : scrX
-    const posY = scrY + scrHeight - winHeight 
-    window.setPosition(posX, posY)
+      : scrX;
+    const posY = scrY + scrHeight - winHeight;
+    window.setPosition(posX, posY);
+  } else {
+    // Centraliza a janela na tela no modo normal
+    window.center();
   }
 }
 
@@ -82,14 +85,26 @@ async function createWindow(
   }
 
   if (VITE_DEV_SERVER_URL) {
-    win.loadURL(VITE_DEV_SERVER_URL)
-    win.webContents.openDevTools()
+    win.loadURL(VITE_DEV_SERVER_URL);
+    // win.webContents.openDevTools()
   } else {
-    win.loadFile(indexHtml)
+    win.loadFile(indexHtml);
   }
 
+  ipcMain.on('minimize-window', () => {
+    if (win) {
+      win.minimize();
+    }
+  });
+
+  ipcMain.on('close-window', () => {
+    if (win) {
+      win.close();
+    }
+  });
+
   win.webContents.on('did-finish-load', () => {
-    if (isTransparent) {
+    if (isTransparent && !!win) {
       // Se o modo for transparente, ativamos o encaminhamento de eventos de mouse
       // win?.setIgnoreMouseEvents(true, { forward: true })
       // Posiciona a janela de acordo com currentCorner
