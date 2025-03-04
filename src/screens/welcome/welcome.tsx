@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router';
-// import HeaderFrame from '@/components/headerFrame/headerFrame';
+import HeaderFrame from '@/components/headerFrame/headerFrame';
 
 const Welcome: React.FC = () => {
     const navigate = useNavigate();
@@ -11,14 +11,12 @@ const Welcome: React.FC = () => {
 
 
     return (
-        <div className='window'>
-            {/* <HeaderFrame/> */}
-            <div className='content'>
-                <h1>Welcome</h1>
+        <div className=''>
+            <HeaderFrame/>
+                <div>Welcome</div>
                 <button onClick={handleButtonClick}>
                     press to start
                 </button>
-            </div>
         </div>
     );
 };

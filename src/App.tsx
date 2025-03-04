@@ -2,14 +2,16 @@ import React, { useEffect, useState } from 'react'
 
 function App() {
   // Inicialmente, definimos o modo transparente
-  const [isTransparent, setIsTransparent] = useState(() => {
-    const savedState = localStorage.getItem('isTransparent')
-    return savedState !== null ? JSON.parse(savedState) : true
-  })
+  // const [isTransparent, setIsTransparent] = useState(() => {
+  //   const savedState = localStorage.getItem('isTransparent')
+  //   return savedState !== null ? JSON.parse(savedState) : true
+  // })
+  const [isTransparent, setIsTransparent] = useState(false)
+  const [currentCorner, setCurrentCorner] = useState('right')
 
-  useEffect(() => {
-    localStorage.setItem('isTransparent', JSON.stringify(isTransparent))
-  }, [isTransparent])
+    // useEffect(() => {
+    //   localStorage.setItem('isTransparent', JSON.stringify(isTransparent))
+    // }, [isTransparent])
 
   const handleToggleMode = () => {
     setIsTransparent(prev => !prev)
@@ -20,6 +22,7 @@ function App() {
   }
 
   const handleToggleCorner = () => {
+    setCurrentCorner(prev => prev === 'right' ? 'left' : 'right')
     window.ipcRenderer.invoke('toggle-window-corner')
   }
 
@@ -32,17 +35,11 @@ function App() {
   }
 
   return (
-    <div style={{ WebkitAppRegion: 'drag', width: '100%', height: '100%' , backgroundColor: 'red'}}>
+    <div style={{  width: '100%', height: '100%', display: 'flex', flexDirection: currentCorner === 'right' ?'row': 'row-reverse', 
+      justifyContent: 'flex-end', 
+      alignItems: 'center'}}>
       <button
-        style={{ WebkitAppRegion: 'no-drag', marginBottom: '1rem' }}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-        onClick={() => console.log('Botão click-through clicado')}
-      >
-        Botão Interativo (click-through)
-      </button>
-      <button
-        style={{ WebkitAppRegion: 'no-drag', marginBottom: '1rem' }}
+        style={{ }}
         onClick={handleToggleMode}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
@@ -51,7 +48,7 @@ function App() {
       </button>
       {isTransparent && (
         <button
-          style={{ WebkitAppRegion: 'no-drag' }}
+          style={{ }}
           onClick={handleToggleCorner}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
