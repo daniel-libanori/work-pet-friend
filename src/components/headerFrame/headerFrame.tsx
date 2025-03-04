@@ -3,7 +3,6 @@ import "./headerFrame.css"; // Certifique-se de criar este arquivo CSS
 
 const HeaderFrame: React.FC = () => {
   const handleMinimize = () => {
-    console.log(window);
     window.ipcRenderer.send("minimize-window");
   };
 

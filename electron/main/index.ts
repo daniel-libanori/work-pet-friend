@@ -168,7 +168,6 @@ ipcMain.handle('open-win', (_, arg) => {
 // Handler para ajustar o comportamento de ignore do mouse
 ipcMain.handle('set-ignore-mouse', (_, ignore: boolean) => {
   if (win) {
-    console.log(ignore)
     if (ignore) {
       win.setIgnoreMouseEvents(true, { forward: true })
     } else {
