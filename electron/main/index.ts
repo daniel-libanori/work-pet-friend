@@ -70,8 +70,8 @@ async function createWindow(
     transparent: true,
     alwaysOnTop: alwaysOnTop,
     frame: false,
-    width: 300,
-    height: 300,
+    width: 500,
+    height: 500,
     minWidth: 300,
     minHeight: 300,
     icon: path.join(process.env.VITE_PUBLIC, 'favicon.ico'),
@@ -194,9 +194,12 @@ ipcMain.handle('toggle-window-mode', async () => {
   if (isTransparent) {
     // win.setBackgroundColor('#FFFFFFFF'); // Fully transparent
     win.setBounds({ ...win.getBounds(), width: 300, height: 300 });
+    win.setMinimumSize(300, 300);
     positionWindow(win);
   } else {
     // win.setBackgroundColor('#fff'); // Cor de fundo padrão
+    win.setBounds({ ...win.getBounds(), width: 500, height: 500 });
+    // win.setMinimumSize(500, 500);  
     win.center();
   }
 
