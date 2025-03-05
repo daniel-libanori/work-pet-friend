@@ -67,7 +67,7 @@ async function createWindow(
 
   win = new BrowserWindow({
     title: 'Main window',
-    transparent: isTransparent,
+    transparent: true,
     alwaysOnTop: alwaysOnTop,
     frame: false,
     width: 300,
@@ -183,7 +183,7 @@ ipcMain.handle('toggle-window-mode', async () => {
   currentMode = currentMode === 'transparent' ? 'normal' : 'transparent';
   const isTransparent = currentMode === 'transparent';
 
-  win.setOpacity(isTransparent ? 0.9 : 1); // Ajuste a opacidade conforme necessário
+  win.setOpacity(isTransparent ? 1 : 1); // Ajuste a opacidade conforme necessário
   win.setAlwaysOnTop(isTransparent);
   win.setIgnoreMouseEvents(isTransparent, { forward: true });
   win.setResizable(!isTransparent);
@@ -192,11 +192,11 @@ ipcMain.handle('toggle-window-mode', async () => {
   win.setHasShadow(!isTransparent);
 
   if (isTransparent) {
-    win.setBackgroundColor('#00000000'); // Transparente
+    // win.setBackgroundColor('#FFFFFFFF'); // Fully transparent
     win.setBounds({ ...win.getBounds(), width: 300, height: 300 });
     positionWindow(win);
   } else {
-    win.setBackgroundColor('#FFFFFF'); // Cor de fundo padrão
+    // win.setBackgroundColor('#fff'); // Cor de fundo padrão
     win.center();
   }
 

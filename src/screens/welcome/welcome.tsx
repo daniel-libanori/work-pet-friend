@@ -10,7 +10,7 @@ const Welcome: React.FC = () => {
   };
 
   return (
-    <div className="">
+    <div className=" bg-[#c78f40]">
       <HeaderFrame />
       <div className="flex flex-col items-center justify-center h-screen" 
       >
