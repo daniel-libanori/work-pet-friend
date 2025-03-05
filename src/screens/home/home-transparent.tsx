@@ -100,9 +100,19 @@ const HomeTransparent: React.FC<HomeNormalProps> = ({
           style={{
             borderRadius: "50%",
             transform: "scaleY(0.4)",
+            borderStyle: "solid",
+            borderWidth: "4px",
+            borderColor: "#472720",
           }}
         />
-        <div className="absolute bg-[#ca7f0f] w-48 h-32 z-10 mt-[125px] flex justify-between">
+        <div
+          className="absolute bg-[#ca7f0f] w-48 h-32 z-10 mt-[130px] flex justify-between"
+          style={{
+            borderStyle: "solid",
+            borderWidth: "0px 3px 0px 3px",
+            borderColor: "#472720",
+          }}
+        >
           <div className="h-32 w-5 bg-[#d98c18] z-20" />
           <div className="h-32 w-5 bg-[#b67007] z-20" />
         </div>
