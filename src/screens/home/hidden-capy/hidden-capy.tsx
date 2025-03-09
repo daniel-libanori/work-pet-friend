@@ -1,27 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import { useGlobalState } from "@/context/globalStateContext";
 
 interface HiddenCapyProps {
   hiddenCapibaraImage: string;
-  setHide: (hide: boolean) => void;
   hide: boolean;
-  currentCorner: string;
   handleHideCapy: (newMode: "transparent" | "normal" | "hidden" | null) => void;
-  onMouseEnter?: () => void;
-  onMouseLeave?: () => void;
 }
 
 const HiddenCapy: React.FC<HiddenCapyProps> = ({
   hiddenCapibaraImage,
-  setHide,
   hide,
-  currentCorner,
   handleHideCapy,
-  onMouseEnter = () => {},
-  onMouseLeave = () => {},
 }) => {
   const [showButton, setShowButton] = useState(false);
+  const { currentCorner, handleMouseEnter, handleMouseLeave } =
+    useGlobalState();
 
   useEffect(() => {
     window.ipcRenderer.invoke("toggle-size", 70, 115);
@@ -49,13 +44,16 @@ const HiddenCapy: React.FC<HiddenCapyProps> = ({
       window.addEventListener("mouseup", handleMouseUp);
 
       // Ensure the image captures all mouse events during the drag
+      // @ts-ignore
       (e.target as HTMLElement).setCapture();
     };
 
     const imgElement = document.querySelector(".draggable-image");
+    // @ts-ignore
     imgElement?.addEventListener("mousedown", handleMouseDown);
 
     return () => {
+      // @ts-ignore
       imgElement?.removeEventListener("mousedown", handleMouseDown);
     };
   }, []);
@@ -73,11 +71,11 @@ const HiddenCapy: React.FC<HiddenCapyProps> = ({
             className="absolute right-8 top-10 bg-gray-200 p-2 h-8 rounded-full shadow-md hover:bg-gray-300 rotate-180 z-20"
             onClick={() => handleHideCapy("transparent")}
             onMouseEnter={() => {
-              onMouseEnter();
+              handleMouseEnter();
               setShowButton(true);
             }}
             onMouseLeave={() => {
-              onMouseLeave();
+              handleMouseLeave();
               setShowButton(false);
             }}
           >
@@ -91,11 +89,11 @@ const HiddenCapy: React.FC<HiddenCapyProps> = ({
             showButton ? "opacity-75 -mr-12" : "opacity-30 -mr-16"
           }  -rotate-90 scale-75 cursor-move`}
           onMouseEnter={() => {
-            onMouseEnter();
+            handleMouseEnter();
             setShowButton(true);
           }}
           onMouseLeave={() => {
-            onMouseLeave();
+            handleMouseLeave();
             setShowButton(false);
           }}
         />

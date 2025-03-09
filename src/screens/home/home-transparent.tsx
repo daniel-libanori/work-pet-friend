@@ -10,28 +10,22 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import HiddenCapy from "./hidden-capy/hidden-capy";
 import { useNavigate } from "react-router";
+import { useGlobalState } from "@/context/globalStateContext";
 
-interface HomeNormalProps {
-  handleToggleMode: (
-    newMode: "transparent" | "normal" | "hidden" | null
-  ) => void;
-  handleToggleCorner: () => void;
-  handleMouseEnter: () => void;
-  handleMouseLeave: () => void;
-  currentCorner: string;
-}
+interface HomeNormalProps {}
 
-const HomeTransparent: React.FC<HomeNormalProps> = ({
-  handleToggleMode,
-  handleToggleCorner,
-  handleMouseEnter,
-  handleMouseLeave,
-  currentCorner,
-}) => {
+const HomeTransparent: React.FC<HomeNormalProps> = ({}) => {
   const [message, setMessage] = useState("");
   const [showBubble, setShowBubble] = useState(false);
   const [hide, setHide] = useState(false);
   const [hoveredButton, setHoveredButton] = useState("");
+  const {
+    currentCorner,
+    toggleCorner,
+    toggleMode,
+    handleMouseEnter,
+    handleMouseLeave,
+  } = useGlobalState();
   const messages = [
     "Keep going!",
     "You're doing great!",
@@ -56,19 +50,15 @@ const HomeTransparent: React.FC<HomeNormalProps> = ({
   const handleHideCapy = (
     newMode: "transparent" | "normal" | "hidden" | null
   ) => {
-    handleToggleMode(newMode);
+    toggleMode(newMode);
     setHide((hide) => !hide);
   };
 
   return hide ? (
     <HiddenCapy
       hiddenCapibaraImage={hiddenCapibaraImage}
-      setHide={setHide}
       handleHideCapy={handleHideCapy}
       hide={hide}
-      currentCorner={currentCorner}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
     />
   ) : (
     <div
@@ -157,7 +147,7 @@ const HomeTransparent: React.FC<HomeNormalProps> = ({
       <div className="absolute right-6 flex flex-col space-y-2 top-20 z-40 ">
         <button
           className="bg-gray-200 p-2 rounded-full shadow-md hover:bg-gray-300"
-          onClick={() => handleToggleMode("normal")}
+          onClick={() => toggleMode("normal")}
           onMouseEnter={() => {
             handleMouseEnter();
             setHoveredButton("Capy's Room");
@@ -185,7 +175,7 @@ const HomeTransparent: React.FC<HomeNormalProps> = ({
         </button>
         <button
           className="bg-gray-200 p-2 rounded-full shadow-md hover:bg-gray-300"
-          onClick={handleToggleCorner}
+          onClick={toggleCorner}
           onMouseEnter={() => {
             handleMouseEnter();
             setHoveredButton("Change Capy Side");
