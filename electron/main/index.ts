@@ -1,4 +1,12 @@
-import { app, BrowserWindow, shell, ipcMain, screen } from "electron";
+import {
+  app,
+  BrowserWindow,
+  shell,
+  ipcMain,
+  screen,
+  Tray,
+  Menu,
+} from "electron";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
@@ -28,10 +36,9 @@ let win: BrowserWindow | null = null;
 const preload = path.join(__dirname, "../preload/index.mjs");
 const indexHtml = path.join(RENDERER_DIST, "index.html");
 
-// Variável para controlar o modo atual: 'transparent' ou 'normal'
 let currentMode: "transparent" | "normal" | "hidden" = "normal";
-// Variável para controlar o canto atual da janela no modo transparente
 let currentCorner: "right" | "left" = "right";
+let tray: Tray | null = null;
 
 /**
  * Posiciona a janela no canto inferior, à direita ou esquerda,
@@ -207,6 +214,7 @@ ipcMain.handle(
     win.setMovable(isHidden || !isTransparent);
     win.setFullScreenable(!isTransparent);
     win.setHasShadow(!isTransparent);
+    win.setSkipTaskbar(isTransparent || isHidden);
 
     if (currentMode === "transparent") {
       win.setBounds({ ...win.getBounds(), width: 300, height: 300 });
@@ -230,16 +238,37 @@ ipcMain.handle(
       win.center();
     }
 
+    if (isTransparent || isHidden) {
+      if (!tray) {
+        tray = new Tray(path.join(process.env.VITE_PUBLIC, "tray-icon.png"));
+        const contextMenu = Menu.buildFromTemplate([
+          {
+            label: "Quit Capybara ):",
+            click: () => {
+              app.quit();
+            },
+          },
+        ]);
+        tray.setToolTip("My Electron App");
+        tray.setContextMenu(contextMenu);
+      }
+      app.dock.hide();
+    } else {
+      if (tray) {
+        tray.destroy();
+        tray = null;
+      }
+      win.show();
+      app.dock.show();
+    }
+
     win.webContents.send("main-process-message", new Date().toLocaleString());
   }
 );
 
-// Handler para alternar o canto da janela no modo transparente
 ipcMain.handle("toggle-window-corner", () => {
   if (currentMode !== "transparent" || !win) return;
-  // Alterna a posição entre 'right' e 'left'
   currentCorner = currentCorner === "right" ? "left" : "right";
-  // Atualiza a posição da janela
   positionWindow(win);
 });
 
