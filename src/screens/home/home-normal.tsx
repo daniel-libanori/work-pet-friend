@@ -7,19 +7,7 @@ import { useSystemState } from "@/context/systemStateContext";
 interface HomeNormalProps {}
 
 const HomeNormal: React.FC<HomeNormalProps> = ({}) => {
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
   const { toggleMode, handleMouseEnter, handleMouseLeave } = useSystemState();
-
-  useEffect(() => {
-    const handleResize = () => setWindowWidth(window.innerWidth);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  const handleButton = () => {
-    window.ipcRenderer.invoke("toggle-size", 150, 150);
-  };
 
   return (
     <>

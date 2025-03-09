@@ -15,12 +15,17 @@ const HiddenCapy: React.FC<HiddenCapyProps> = ({
   handleHideCapy,
 }) => {
   const [showButton, setShowButton] = useState(false);
-  const { currentCorner, handleMouseEnter, handleMouseLeave } =
-    useSystemState();
+  const {
+    currentCorner,
+    handleMouseEnter,
+    handleMouseLeave,
+    toggleSize,
+    togglePosition,
+  } = useSystemState();
 
   useEffect(() => {
-    window.ipcRenderer.invoke("toggle-size", 70, 115);
-    window.ipcRenderer.invoke("toggle-position");
+    toggleSize(70, 115);
+    togglePosition();
   }, [hide]);
 
   useEffect(() => {

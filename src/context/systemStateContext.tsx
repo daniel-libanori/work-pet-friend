@@ -7,6 +7,8 @@ interface SystemState {
   toggleCorner: () => void;
   handleMouseEnter: () => void;
   handleMouseLeave: () => void;
+  toggleSize: (width: number, height: number) => void;
+  togglePosition: () => void;
 }
 
 const SystemStateContext = createContext<SystemState | undefined>(undefined);
@@ -29,6 +31,14 @@ export const SystemStateProvider: React.FC<{ children: ReactNode }> = ({
     window.ipcRenderer.invoke("toggle-window-corner");
   };
 
+  const toggleSize = (width: number, height: number) => {
+    window.ipcRenderer.invoke("toggle-size", width, height);
+  };
+
+  const togglePosition = () => {
+    window.ipcRenderer.invoke("toggle-position");
+  };
+
   const handleMouseEnter = () => {
     window.ipcRenderer.invoke("set-ignore-mouse", false);
   };
@@ -46,6 +56,8 @@ export const SystemStateProvider: React.FC<{ children: ReactNode }> = ({
         toggleCorner,
         handleMouseEnter,
         handleMouseLeave,
+        toggleSize,
+        togglePosition,
       }}
     >
       {children}
