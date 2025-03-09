@@ -67,6 +67,8 @@ const HomeTransparent: React.FC<HomeNormalProps> = ({
       handleHideCapy={handleHideCapy}
       hide={hide}
       currentCorner={currentCorner}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     />
   ) : (
     <div

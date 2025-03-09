@@ -8,6 +8,8 @@ interface HiddenCapyProps {
   hide: boolean;
   currentCorner: string;
   handleHideCapy: (newMode: "transparent" | "normal" | "hidden" | null) => void;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
 }
 
 const HiddenCapy: React.FC<HiddenCapyProps> = ({
@@ -16,6 +18,8 @@ const HiddenCapy: React.FC<HiddenCapyProps> = ({
   hide,
   currentCorner,
   handleHideCapy,
+  onMouseEnter = () => {},
+  onMouseLeave = () => {},
 }) => {
   const [showButton, setShowButton] = useState(false);
 
@@ -80,8 +84,14 @@ const HiddenCapy: React.FC<HiddenCapyProps> = ({
           className={`w-28 h-28 z-10 draggable-image ${
             showButton ? "opacity-75 -mr-12" : "opacity-30 -mr-16"
           }  -rotate-90 scale-75 cursor-move`}
-          onMouseEnter={() => setShowButton(true)}
-          onMouseLeave={() => setShowButton(false)}
+          onMouseEnter={() => {
+            onMouseEnter();
+            setShowButton(true);
+          }}
+          onMouseLeave={() => {
+            onMouseLeave();
+            setShowButton(false);
+          }}
         />
       </div>
     </div>

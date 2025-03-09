@@ -202,7 +202,7 @@ ipcMain.handle(
 
     win.setOpacity(1);
     win.setAlwaysOnTop(isTransparent);
-    win.setIgnoreMouseEvents(currentMode === "transparent", { forward: true });
+    win.setIgnoreMouseEvents(isTransparent, { forward: true });
     win.setResizable(!isTransparent);
     win.setMovable(isHidden || !isTransparent);
     win.setFullScreenable(!isTransparent);
