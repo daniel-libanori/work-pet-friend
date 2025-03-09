@@ -7,9 +7,17 @@ const Home: React.FC = () => {
   const [isTransparent, setIsTransparent] = useState(false);
   const [currentCorner, setCurrentCorner] = useState("right");
 
-  const handleToggleMode = () => {
-    setIsTransparent((prev) => !prev);
-    window.ipcRenderer.invoke("toggle-window-mode").then(() => {});
+  const handleToggleMode = (
+    newMode: "transparent" | "normal" | "hidden" | null = null
+  ) => {
+    let mode = newMode ? newMode : isTransparent ? "normal" : "transparent";
+    if (!newMode) {
+      setIsTransparent((prev) => !prev);
+    } else {
+      setIsTransparent(newMode === "transparent" || newMode === "hidden");
+    }
+
+    window.ipcRenderer.invoke("toggle-window-mode", newMode).then(() => {});
   };
 
   const handleToggleCorner = () => {

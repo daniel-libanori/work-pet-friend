@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react";
 
 function App() {
   // Inicialmente, definimos o modo transparente
@@ -6,49 +6,56 @@ function App() {
   //   const savedState = localStorage.getItem('isTransparent')
   //   return savedState !== null ? JSON.parse(savedState) : true
   // })
-  const [isTransparent, setIsTransparent] = useState(false)
-  const [currentCorner, setCurrentCorner] = useState('right')
+  const [isTransparent, setIsTransparent] = useState(false);
+  const [currentCorner, setCurrentCorner] = useState("right");
 
-    // useEffect(() => {
-    //   localStorage.setItem('isTransparent', JSON.stringify(isTransparent))
-    // }, [isTransparent])
+  // useEffect(() => {
+  //   localStorage.setItem('isTransparent', JSON.stringify(isTransparent))
+  // }, [isTransparent])
 
   const handleToggleMode = () => {
-    setIsTransparent(prev => !prev)
-    window.ipcRenderer.invoke('toggle-window-mode').then(() => {
-      // Atualiza o estado; se estava transparente, passa a normal, e vice-versa
-      // setIsTransparent(prev => !prev)
-    })
-  }
+    let newMode = isTransparent ? "normal" : "transparent"; //'hidden'
+
+    //setIsTransparent(prev => !prev)
+
+    window.ipcRenderer.invoke("toggle-window-mode", newMode).then(() => {});
+  };
 
   const handleToggleCorner = () => {
-    setCurrentCorner(prev => prev === 'right' ? 'left' : 'right')
-    window.ipcRenderer.invoke('toggle-window-corner')
-  }
+    setCurrentCorner((prev) => (prev === "right" ? "left" : "right"));
+    window.ipcRenderer.invoke("toggle-window-corner");
+  };
 
   const handleMouseEnter = () => {
-    window.ipcRenderer.invoke('set-ignore-mouse', false)
-  }
+    window.ipcRenderer.invoke("set-ignore-mouse", false);
+  };
 
   const handleMouseLeave = () => {
-    window.ipcRenderer.invoke('set-ignore-mouse', true && isTransparent)
-  }
+    window.ipcRenderer.invoke("set-ignore-mouse", true && isTransparent);
+  };
 
   return (
-    <div style={{  width: '100%', height: '100%', display: 'flex', flexDirection: currentCorner === 'right' ?'row': 'row-reverse', 
-      justifyContent: 'flex-end', 
-      alignItems: 'center'}}>
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        flexDirection: currentCorner === "right" ? "row" : "row-reverse",
+        justifyContent: "flex-end",
+        alignItems: "center",
+      }}
+    >
       <button
-        style={{ }}
+        style={{}}
         onClick={handleToggleMode}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
-        Alternar para Modo {isTransparent ? 'Normal' : 'Transparente'}
+        Alternar para Modo {isTransparent ? "Normal" : "Transparente"}
       </button>
       {isTransparent && (
         <button
-          style={{ }}
+          style={{}}
           onClick={handleToggleCorner}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
@@ -57,7 +64,7 @@ function App() {
         </button>
       )}
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

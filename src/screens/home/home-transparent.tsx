@@ -12,7 +12,9 @@ import HiddenCapy from "./hidden-capy/hidden-capy";
 import { useNavigate } from "react-router";
 
 interface HomeNormalProps {
-  handleToggleMode: () => void;
+  handleToggleMode: (
+    newMode: "transparent" | "normal" | "hidden" | null
+  ) => void;
   handleToggleCorner: () => void;
   handleMouseEnter: () => void;
   handleMouseLeave: () => void;
@@ -51,10 +53,18 @@ const HomeTransparent: React.FC<HomeNormalProps> = ({
     return () => clearInterval(interval);
   }, [showBubble, messages]);
 
+  const handleHideCapy = (
+    newMode: "transparent" | "normal" | "hidden" | null
+  ) => {
+    handleToggleMode(newMode);
+    setHide((hide) => !hide);
+  };
+
   return hide ? (
     <HiddenCapy
       hiddenCapibaraImage={hiddenCapibaraImage}
       setHide={setHide}
+      handleHideCapy={handleHideCapy}
       hide={hide}
       currentCorner={currentCorner}
     />
@@ -93,7 +103,17 @@ const HomeTransparent: React.FC<HomeNormalProps> = ({
         <img
           src={capibaraImage}
           alt="capivara"
-          className="absolute w-28 h-28 z-20 top-6 left-3 z-30"
+          className="absolute w-28 h-28 z-20 top-6 left-3 z-40"
+        />
+        <div
+          className="absolute bg-[#8f4704] w-24 h-24 z-30"
+          style={{
+            top: 81,
+            left: 28,
+            opacity: 0.7,
+            borderRadius: "50%",
+            transform: "scaleY(0.2)",
+          }}
         />
         <div
           className="absolute bg-[#ff9900] w-48 h-16 z-10 rounded-full mt-24 z-20"
@@ -135,7 +155,7 @@ const HomeTransparent: React.FC<HomeNormalProps> = ({
       <div className="absolute right-6 flex flex-col space-y-2 top-20 z-40 ">
         <button
           className="bg-gray-200 p-2 rounded-full shadow-md hover:bg-gray-300"
-          onClick={handleToggleMode}
+          onClick={() => handleToggleMode("normal")}
           onMouseEnter={() => {
             handleMouseEnter();
             setHoveredButton("Capy's Room");
@@ -149,7 +169,7 @@ const HomeTransparent: React.FC<HomeNormalProps> = ({
         </button>
         <button
           className="bg-gray-200 p-2 rounded-full shadow-md hover:bg-gray-300"
-          onClick={() => setHide((hide) => !hide)}
+          onClick={() => handleHideCapy("hidden")}
           onMouseEnter={() => {
             handleMouseEnter();
             setHoveredButton("Hide Capy");
