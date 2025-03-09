@@ -2,14 +2,14 @@ import HeaderFrame from "@/components/headerFrame/headerFrame";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import capibaraImage from "@/assets/testAssets/test-capibara.png"; // Importando a imagem
-import { useGlobalState } from "@/context/globalStateContext";
+import { useSystemState } from "@/context/systemStateContext";
 
 interface HomeNormalProps {}
 
 const HomeNormal: React.FC<HomeNormalProps> = ({}) => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-  const { toggleMode, handleMouseEnter, handleMouseLeave } = useGlobalState();
+  const { toggleMode, handleMouseEnter, handleMouseLeave } = useSystemState();
 
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);

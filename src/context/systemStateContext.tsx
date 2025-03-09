@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
 
-interface GlobalState {
+interface SystemState {
   isTransparent: boolean;
   currentCorner: string;
   toggleMode: (newMode: "transparent" | "normal" | "hidden" | null) => void;
@@ -9,9 +9,9 @@ interface GlobalState {
   handleMouseLeave: () => void;
 }
 
-const GlobalStateContext = createContext<GlobalState | undefined>(undefined);
+const SystemStateContext = createContext<SystemState | undefined>(undefined);
 
-export const GlobalStateProvider: React.FC<{ children: ReactNode }> = ({
+export const SystemStateProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [isTransparent, setIsTransparent] = useState(false);
@@ -38,7 +38,7 @@ export const GlobalStateProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   return (
-    <GlobalStateContext.Provider
+    <SystemStateContext.Provider
       value={{
         isTransparent,
         currentCorner,
@@ -49,14 +49,14 @@ export const GlobalStateProvider: React.FC<{ children: ReactNode }> = ({
       }}
     >
       {children}
-    </GlobalStateContext.Provider>
+    </SystemStateContext.Provider>
   );
 };
 
-export const useGlobalState = (): GlobalState => {
-  const context = useContext(GlobalStateContext);
+export const useSystemState = (): SystemState => {
+  const context = useContext(SystemStateContext);
   if (context === undefined) {
-    throw new Error("useGlobalState must be used within a GlobalStateProvider");
+    throw new Error("useSystemState must be used within a SystemStateProvider");
   }
   return context;
 };

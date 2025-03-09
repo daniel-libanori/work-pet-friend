@@ -4,7 +4,7 @@ import App from "./App";
 import Home from "./screens/home/home";
 import Welcome from "./screens/welcome/welcome";
 import { BrowserRouter, Route, Routes } from "react-router";
-import { GlobalStateProvider } from "./context/globalStateContext";
+import { SystemStateProvider } from "./context/systemStateContext";
 
 import "./index.css";
 
@@ -14,7 +14,7 @@ import "./demos/ipc";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <GlobalStateProvider>
+    <SystemStateProvider>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Welcome />} />
@@ -22,7 +22,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
           <Route path="/app" element={<App />} />
         </Routes>
       </BrowserRouter>
-    </GlobalStateProvider>
+    </SystemStateProvider>
   </React.StrictMode>
 );
 

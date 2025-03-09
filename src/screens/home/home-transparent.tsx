@@ -10,7 +10,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import HiddenCapy from "./hidden-capy/hidden-capy";
 import { useNavigate } from "react-router";
-import { useGlobalState } from "@/context/globalStateContext";
+import { useSystemState } from "@/context/systemStateContext";
 
 interface HomeNormalProps {}
 
@@ -25,7 +25,7 @@ const HomeTransparent: React.FC<HomeNormalProps> = ({}) => {
     toggleMode,
     handleMouseEnter,
     handleMouseLeave,
-  } = useGlobalState();
+  } = useSystemState();
   const messages = [
     "Keep going!",
     "You're doing great!",

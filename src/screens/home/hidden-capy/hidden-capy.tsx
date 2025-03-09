@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
-import { useGlobalState } from "@/context/globalStateContext";
+import { useSystemState } from "@/context/systemStateContext";
 
 interface HiddenCapyProps {
   hiddenCapibaraImage: string;
@@ -16,7 +16,7 @@ const HiddenCapy: React.FC<HiddenCapyProps> = ({
 }) => {
   const [showButton, setShowButton] = useState(false);
   const { currentCorner, handleMouseEnter, handleMouseLeave } =
-    useGlobalState();
+    useSystemState();
 
   useEffect(() => {
     window.ipcRenderer.invoke("toggle-size", 70, 115);
