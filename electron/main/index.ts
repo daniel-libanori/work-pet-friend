@@ -84,6 +84,7 @@ async function createWindow(
     height: 500,
     minWidth: 300,
     minHeight: 300,
+    resizable: false,
     icon: path.join(process.env.VITE_PUBLIC, "favicon.ico"),
     webPreferences: {
       preload,
@@ -210,7 +211,7 @@ ipcMain.handle(
     win.setOpacity(1);
     win.setAlwaysOnTop(isTransparent);
     win.setIgnoreMouseEvents(isTransparent, { forward: true });
-    win.setResizable(!isTransparent);
+    win.setResizable(false);
     win.setMovable(isHidden || !isTransparent);
     win.setFullScreenable(!isTransparent);
     win.setHasShadow(!isTransparent);
@@ -242,6 +243,13 @@ ipcMain.handle(
       if (!tray) {
         tray = new Tray(path.join(process.env.VITE_PUBLIC, "tray-icon.png"));
         const contextMenu = Menu.buildFromTemplate([
+          {
+            label: "Back to Capy's Room",
+            click: () => {
+              win?.webContents.send("set-normal-mode");
+              backToNormalMode();
+            },
+          },
           {
             label: "Quit Capybara ):",
             click: () => {
@@ -296,3 +304,31 @@ ipcMain.handle("toggle-position", async (_, mode: "hidden" | "transparent") => {
     positionWindow(win);
   }
 });
+
+const backToNormalMode = async () => {
+  if (!win) return;
+
+  currentMode = "normal";
+  win.setOpacity(1);
+  win.setAlwaysOnTop(false);
+  win.setIgnoreMouseEvents(false);
+  win.setResizable(true);
+  win.setMovable(true);
+  win.setFullScreenable(true);
+  win.setHasShadow(true);
+  win.setSkipTaskbar(false);
+
+  win.setBounds({ ...win.getBounds(), width: 500, height: 500 });
+  win.center();
+
+  if (tray) {
+    tray.destroy();
+    tray = null;
+  }
+  win.show();
+  app.dock.show();
+
+  win.webContents.send("main-process-message", new Date().toLocaleString());
+  win.webContents.send("update-is-transparent", false); // Envia mensagem para atualizar o estado
+};
+ipcMain.handle("set-normal-mode", backToNormalMode);

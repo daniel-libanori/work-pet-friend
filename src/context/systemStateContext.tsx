@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
 
 interface SystemState {
   isTransparent: boolean;
@@ -20,6 +26,27 @@ export const SystemStateProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const [isTransparent, setIsTransparent] = useState(false);
   const [currentCorner, setCurrentCorner] = useState("right");
+
+  useEffect(() => {
+    const updateIsTransparent = (_: any, isTransparent: boolean) => {
+      setIsTransparent(isTransparent);
+    };
+
+    const setNormalMode = () => {
+      setIsTransparent(false);
+    };
+
+    window.ipcRenderer.on("update-is-transparent", updateIsTransparent);
+    window.ipcRenderer.on("set-normal-mode", setNormalMode);
+
+    return () => {
+      // window.ipcRenderer.removeListener(
+      //   "update-is-transparent",
+      //   updateIsTransparent
+      // );
+      // window.ipcRenderer.removeListener("set-normal-mode", setNormalMode);
+    };
+  }, []);
 
   const toggleMode = (
     newMode: "transparent" | "normal" | "hidden" | null = "normal"
