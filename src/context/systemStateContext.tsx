@@ -9,6 +9,8 @@ interface SystemState {
   handleMouseLeave: () => void;
   toggleSize: (width: number, height: number) => void;
   togglePosition: () => void;
+  handleMinimize: () => void;
+  handleClose: () => void;
 }
 
 const SystemStateContext = createContext<SystemState | undefined>(undefined);
@@ -47,6 +49,14 @@ export const SystemStateProvider: React.FC<{ children: ReactNode }> = ({
     window.ipcRenderer.invoke("set-ignore-mouse", true && isTransparent);
   };
 
+  const handleMinimize = () => {
+    window.ipcRenderer.send("minimize-window");
+  };
+
+  const handleClose = () => {
+    window.ipcRenderer.send("close-window");
+  };
+
   return (
     <SystemStateContext.Provider
       value={{
@@ -58,6 +68,8 @@ export const SystemStateProvider: React.FC<{ children: ReactNode }> = ({
         handleMouseLeave,
         toggleSize,
         togglePosition,
+        handleMinimize,
+        handleClose,
       }}
     >
       {children}
