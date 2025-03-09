@@ -3,11 +3,18 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import capibaraImage from "@/assets/testAssets/test-capibara.png"; // Importando a imagem
 import { useSystemState } from "@/context/systemStateContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGear, faShirt, faStore } from "@fortawesome/free-solid-svg-icons";
 
 interface HomeNormalProps {}
 
 const HomeNormal: React.FC<HomeNormalProps> = ({}) => {
-  const { toggleMode, handleMouseEnter, handleMouseLeave } = useSystemState();
+  const { toggleMode, handleMouseEnter, handleMouseLeave, toggleSize } =
+    useSystemState();
+
+  useEffect(() => {
+    toggleSize(720, 720);
+  }, []);
 
   return (
     <>
@@ -19,16 +26,17 @@ const HomeNormal: React.FC<HomeNormalProps> = ({}) => {
           backgroundColor: "#c78f40",
         }}
       >
-        <div className="flex flex-col items-center justify-between h-screen px-2">
-          <div className=" w-full h-10 mt-10 mx-10 flex items-center justify-center">
-            <div
-              className="bg-[#f00] border-2 border-[#6a4819] px-3 py-3
-            rounded-xl flex items-center justify-center"
+        <div className="flex flex-col items-center justify-between h-screen overflow-hidden">
+          <div className=" w-full h-10 mt-16 mx-10 flex items-center justify-center">
+            <button
+              className="appearance-none bg-[#8f4704] border-2 border-[#633000] border-solid p-3
+            rounded-xl flex items-center justify-center text-[#d69851] font-bold text-md"
             >
               Capivara Rangel
-            </div>
+            </button>
           </div>
-          <div>
+
+          <div className="-mb-24">
             <div className="relative w-36 h-36">
               <img
                 src={capibaraImage}
@@ -62,6 +70,20 @@ const HomeNormal: React.FC<HomeNormalProps> = ({}) => {
 
             <div className="relative w-0 h-0">
               <div
+                className={`absolute bg-[#c78f40] z-10 w-64 h-64`}
+                style={{
+                  left: -231,
+                  bottom: 144,
+                  transform: "scaleY(0.38) rotate(46.5deg) scaleX(0.98)",
+                  borderWidth: "0px 4px 0px 0px",
+                  borderStyle: "solid",
+                  borderColor: "#6a4819",
+                }}
+              />
+            </div>
+
+            <div className="relative w-0 h-0">
+              <div
                 className={`absolute bg-[#f5b657] z-5 h-64`}
                 style={{
                   width: 184,
@@ -75,113 +97,19 @@ const HomeNormal: React.FC<HomeNormalProps> = ({}) => {
               />
             </div>
 
-            {/* <div className="flex justify-center items-center">
+            <div className="relative w-0 h-0">
               <div
-                className="absolute overflow-hidden z-20"
+                className={`absolute bg-[#c78f40] z-10 w-64 h-64`}
                 style={{
-                  width: 185,
-                  height: 75.75,
-                  bottom: 566.0,
-                  left: 129,
-                  transform: "scaleX(-1)",
-                  borderWidth: "0px 0px 0px 2px",
+                  left: 125,
+                  bottom: 146,
+                  transform: "scaleY(0.38) rotate(41.5deg) scaleX(0.98)",
+                  borderWidth: "0px 0px 4px 0px",
                   borderStyle: "solid",
                   borderColor: "#6a4819",
                 }}
-              >
-                <div
-                  className={`absolute bg-[#f5b657] z-20 h-64`}
-                  style={{
-                    width: 238,
-                    left: -56,
-                    bottom: -217.5,
-                    transform: "scaleX(1) scaleY(1) rotate(201.75deg)",
-                    borderWidth: "0px 0px 2px 0px",
-                    borderStyle: "solid",
-                    borderColor: "#6a4819",
-                  }}
-                />
-              </div>
-              <div
-                className="absolute overflow-hidden"
-                style={{
-                  width: 185,
-                  height: 75.75,
-                  bottom: 566.4,
-                  left: 314,
-                  borderWidth: "0px 0px 0px 2px",
-                  borderStyle: "solid",
-                  borderColor: "#6a4819",
-                }}
-              >
-                <div
-                  className={`absolute bg-[#e8a848] z-20 h-64`}
-                  style={{
-                    width: 238,
-                    left: -56,
-                    bottom: -217.5,
-                    transform: "scaleX(1) scaleY(1) rotate(201.75deg)",
-                    borderWidth: "0px 0px 2px 0px",
-                    borderStyle: "solid",
-                    borderColor: "#6a4819",
-                  }}
-                />
-              </div>
-            </div> */}
-
-            {/* <div className="flex justify-center items-center">
-              <div
-                className="absolute overflow-hidden z-20"
-                style={{
-                  width: 185,
-                  height: 75.75,
-                  bottom: 566.0,
-                  left: 129,
-                  transform: "scaleX(-1)",
-                  borderWidth: "0px 0px 0px 2px",
-                  borderStyle: "solid",
-                  borderColor: "#6a4819",
-                }}
-              >
-                <div
-                  className={`absolute bg-[#f5b657] z-20 h-64`}
-                  style={{
-                    width: 238,
-                    left: -56,
-                    bottom: -217.5,
-                    transform: "scaleX(1) scaleY(1) rotate(201.75deg)",
-                    borderWidth: "0px 0px 2px 0px",
-                    borderStyle: "solid",
-                    borderColor: "#6a4819",
-                  }}
-                />
-              </div>
-              <div
-                className="absolute overflow-hidden"
-                style={{
-                  width: 185,
-                  height: 75.75,
-                  bottom: 566.4,
-                  left: 314,
-                  borderWidth: "0px 0px 0px 2px",
-                  borderStyle: "solid",
-                  borderColor: "#6a4819",
-                }}
-              >
-                <div
-                  className={`absolute bg-[#e8a848] z-20 h-64`}
-                  style={{
-                    width: 238,
-                    left: -56,
-                    bottom: -217.5,
-                    transform: "scaleX(1) scaleY(1) rotate(201.75deg)",
-                    borderWidth: "0px 0px 2px 0px",
-                    borderStyle: "solid",
-                    borderColor: "#6a4819",
-                  }}
-                />
-              </div>
-            </div> */}
+              />
+            </div>
 
             <div className="relative w-0 h-0">
               <div
@@ -198,17 +126,44 @@ const HomeNormal: React.FC<HomeNormalProps> = ({}) => {
               />
             </div>
           </div>
-          <button
-            className={`appearance-none mb-5 bg-blue-500 
-            text-white py-2 px-4 
-            rounded border-dashed border-white border-2`}
-            style={{}}
-            onClick={() => toggleMode("transparent")}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-          >
-            Alternar para Modo Transparente
-          </button>
+
+          <div className="w-full flex flex-col items-center justify-center bg-[#8f4704] pt-4 border-t-4 border-solid border-[#633000]">
+            <div className="w-full h-16 mb-4 flex gap-10 items-center justify-center">
+              <div className="bg-[#c08440] hover:bg-[#d69851] w-14 h-14 rounded-full border-[#633000] border-4 border-solid flex items-center justify-center cursor-pointer">
+                <FontAwesomeIcon
+                  icon={faStore}
+                  style={{ fontSize: 23 }}
+                  color="#4d330e"
+                />
+              </div>
+              <div className="bg-[#c08440] hover:bg-[#d69851] w-14 h-14 rounded-full border-[#633000] border-4 border-solid flex items-center justify-center cursor-pointer">
+                <FontAwesomeIcon
+                  icon={faShirt}
+                  style={{ fontSize: 23 }}
+                  color="#4d330e"
+                />
+              </div>
+              <div className="bg-[#c08440] hover:bg-[#d69851] w-14 h-14 rounded-full border-[#633000] border-4 border-solid flex items-center justify-center cursor-pointer">
+                <FontAwesomeIcon
+                  icon={faGear}
+                  style={{ fontSize: 23 }}
+                  color="#4d330e"
+                />
+              </div>
+            </div>
+
+            <button
+              className={`appearance-none mb-5 bg-[#c08440] hover:bg-[#d69851]
+            text-[#4d330e] py-2 px-4 cursor-pointer font-bold
+            rounded border-solid border-[#633000] border-2`}
+              style={{}}
+              onClick={() => toggleMode("transparent")}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+            >
+              Alternar para Modo Transparente
+            </button>
+          </div>
         </div>
       </div>
     </>

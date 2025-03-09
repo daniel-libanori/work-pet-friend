@@ -6,7 +6,7 @@ const HeaderFrame: React.FC = () => {
   const { handleMinimize, handleClose } = useSystemState();
 
   return (
-    <div className="title-bar">
+    <div className="title-bar z-40">
       <div className="title-bar-buttons mr-2 flex gap-2">
         <button
           className="w-3 h-3 rounded-full flex items-center justify-center"

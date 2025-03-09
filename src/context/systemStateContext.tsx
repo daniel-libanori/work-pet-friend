@@ -8,7 +8,7 @@ interface SystemState {
   handleMouseEnter: () => void;
   handleMouseLeave: () => void;
   toggleSize: (width: number, height: number) => void;
-  togglePosition: () => void;
+  togglePosition: (mode: "hidden" | "transparent") => void;
   handleMinimize: () => void;
   handleClose: () => void;
 }
@@ -37,8 +37,8 @@ export const SystemStateProvider: React.FC<{ children: ReactNode }> = ({
     window.ipcRenderer.invoke("toggle-size", width, height);
   };
 
-  const togglePosition = () => {
-    window.ipcRenderer.invoke("toggle-position");
+  const togglePosition = (mode: "hidden" | "transparent") => {
+    window.ipcRenderer.invoke("toggle-position", mode);
   };
 
   const handleMouseEnter = () => {

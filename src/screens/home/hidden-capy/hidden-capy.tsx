@@ -25,7 +25,7 @@ const HiddenCapy: React.FC<HiddenCapyProps> = ({
 
   useEffect(() => {
     toggleSize(70, 115);
-    togglePosition();
+    togglePosition("hidden");
   }, [hide]);
 
   useEffect(() => {

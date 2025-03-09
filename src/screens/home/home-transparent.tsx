@@ -25,6 +25,8 @@ const HomeTransparent: React.FC<HomeNormalProps> = ({}) => {
     toggleMode,
     handleMouseEnter,
     handleMouseLeave,
+    toggleSize,
+    togglePosition,
   } = useSystemState();
   const messages = [
     "Keep going!",
@@ -53,6 +55,10 @@ const HomeTransparent: React.FC<HomeNormalProps> = ({}) => {
     toggleMode(newMode);
     setHide((hide) => !hide);
   };
+  useEffect(() => {
+    toggleSize(300, 300);
+    togglePosition("transparent");
+  }, []);
 
   return hide ? (
     <HiddenCapy

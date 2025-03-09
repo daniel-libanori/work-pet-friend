@@ -250,13 +250,20 @@ ipcMain.handle("toggle-size", async (_, width: number, height: number) => {
   win.setMinimumSize(width, height);
 });
 
-ipcMain.handle("toggle-position", async () => {
+ipcMain.handle("toggle-position", async (_, mode: "hidden" | "transparent") => {
   if (!win) return;
 
-  const display = screen.getPrimaryDisplay();
-  const { width: scrWidth, height: scrHeight } = display.bounds;
-  const { width: winWidth, height: winHeight } = win.getBounds();
-  const posX = currentCorner === "right" ? scrWidth - winWidth : 0;
-  const posY = Math.min(Math.max(win.getBounds().y, 0), scrHeight - winHeight);
-  win.setPosition(posX, posY);
+  if (mode === "hidden") {
+    const display = screen.getPrimaryDisplay();
+    const { width: scrWidth, height: scrHeight } = display.bounds;
+    const { width: winWidth, height: winHeight } = win.getBounds();
+    const posX = currentCorner === "right" ? scrWidth - winWidth : 0;
+    const posY = Math.min(
+      Math.max(win.getBounds().y, 0),
+      scrHeight - winHeight
+    );
+    win.setPosition(posX, posY);
+  } else {
+    positionWindow(win);
+  }
 });
