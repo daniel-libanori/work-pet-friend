@@ -72,8 +72,14 @@ const HiddenCapy: React.FC<HiddenCapyProps> = ({
           <button
             className="absolute right-8 top-10 bg-gray-200 p-2 h-8 rounded-full shadow-md hover:bg-gray-300 rotate-180 z-20"
             onClick={() => handleHideCapy("transparent")}
-            onMouseEnter={() => setShowButton(true)}
-            onMouseLeave={() => setShowButton(false)}
+            onMouseEnter={() => {
+              onMouseEnter();
+              setShowButton(true);
+            }}
+            onMouseLeave={() => {
+              onMouseLeave();
+              setShowButton(false);
+            }}
           >
             <FontAwesomeIcon icon={faRightFromBracket} />
           </button>
