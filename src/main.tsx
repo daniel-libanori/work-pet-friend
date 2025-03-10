@@ -9,6 +9,7 @@ import { SystemStateProvider } from "./context/systemStateContext";
 import "./index.css";
 
 import "./demos/ipc";
+import Closet from "./screens/closet/closet";
 // If you want use Node.js, the`nodeIntegration` needs to be enabled in the Main process.
 // import './demos/node'
 
@@ -19,6 +20,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
         <Routes>
           <Route path="/" element={<Welcome />} />
           <Route path="/home" element={<Home />} />
+          <Route path="/closet" element={<Closet />} />
           <Route path="/app" element={<App />} />
         </Routes>
       </BrowserRouter>

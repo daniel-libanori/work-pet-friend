@@ -1,20 +1,51 @@
 import HeaderFrame from "@/components/headerFrame/headerFrame";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
-import capibaraImage from "@/assets/testAssets/test-capibara.png"; // Importando a imagem
+import capibaraImage from "@/assets/testAssets/test-capibara.png";
 import { useSystemState } from "@/context/systemStateContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGear, faShirt, faStore } from "@fortawesome/free-solid-svg-icons";
+import {
+  faGear,
+  faShirt,
+  faStore,
+  faUserGroup,
+} from "@fortawesome/free-solid-svg-icons";
 
 interface HomeNormalProps {}
 
 const HomeNormal: React.FC<HomeNormalProps> = ({}) => {
   const { toggleMode, handleMouseEnter, handleMouseLeave, toggleSize } =
     useSystemState();
+  const navigate = useNavigate();
 
   useEffect(() => {
     toggleSize(720, 720);
   }, []);
+
+  const menuOptions = [
+    {
+      icon: faStore,
+      title: "Store",
+      onClick: () => {},
+    },
+    {
+      icon: faShirt,
+      title: "Closet",
+      onClick: () => {
+        navigate("/closet");
+      },
+    },
+    {
+      icon: faUserGroup,
+      title: "Capy Friends",
+      onClick: () => {},
+    },
+    {
+      icon: faGear,
+      title: "Settings",
+      onClick: () => {},
+    },
+  ];
 
   return (
     <>
@@ -129,27 +160,42 @@ const HomeNormal: React.FC<HomeNormalProps> = ({}) => {
 
           <div className="w-full flex flex-col items-center justify-center bg-[#8f4704] pt-4 border-t-4 border-solid border-[#633000]">
             <div className="w-full h-16 mb-4 flex gap-10 items-center justify-center">
-              <div className="bg-[#c08440] hover:bg-[#d69851] w-14 h-14 rounded-full border-[#633000] border-4 border-solid flex items-center justify-center cursor-pointer">
-                <FontAwesomeIcon
-                  icon={faStore}
-                  style={{ fontSize: 23 }}
-                  color="#4d330e"
-                />
-              </div>
-              <div className="bg-[#c08440] hover:bg-[#d69851] w-14 h-14 rounded-full border-[#633000] border-4 border-solid flex items-center justify-center cursor-pointer">
-                <FontAwesomeIcon
-                  icon={faShirt}
-                  style={{ fontSize: 23 }}
-                  color="#4d330e"
-                />
-              </div>
-              <div className="bg-[#c08440] hover:bg-[#d69851] w-14 h-14 rounded-full border-[#633000] border-4 border-solid flex items-center justify-center cursor-pointer">
-                <FontAwesomeIcon
-                  icon={faGear}
-                  style={{ fontSize: 23 }}
-                  color="#4d330e"
-                />
-              </div>
+              {menuOptions.map((option, index) => {
+                const [isHovered, setIsHovered] = useState(false);
+
+                return (
+                  <div
+                    key={index}
+                    style={{ transitionDuration: "1000ms" }}
+                    className={`bg-[#c08440] hover:bg-[#d69851] transition-all ease-in-out ${
+                      isHovered ? "px-4" : "w-14"
+                    } h-14 rounded-full border-[#633000] border-4 border-solid flex items-center justify-center cursor-pointer`}
+                    onMouseEnter={() => setIsHovered(true)}
+                    onMouseLeave={() => setIsHovered(false)}
+                    onClick={option.onClick}
+                  >
+                    <FontAwesomeIcon
+                      icon={option.icon}
+                      style={{ fontSize: 23 }}
+                      color="#4d330e"
+                    />
+                    <span
+                      style={{
+                        transitionDuration: isHovered ? "800ms" : "0ms",
+                      }}
+                      className={`text-[#4d330e] font-bold 
+                        ${
+                          isHovered
+                            ? "inherit opacity-100"
+                            : "absolute opacity-0 w-16"
+                        }
+                        text-sm font-mono ml-3 transition-all ease-in`}
+                    >
+                      {option.title}
+                    </span>
+                  </div>
+                );
+              })}
             </div>
 
             <button
