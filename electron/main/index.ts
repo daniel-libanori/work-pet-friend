@@ -11,6 +11,7 @@ import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 import os from "node:os";
+import fs from "node:fs";
 import { update } from "./update";
 
 const require = createRequire(import.meta.url);
@@ -35,6 +36,13 @@ if (!app.requestSingleInstanceLock()) {
 let win: BrowserWindow | null = null;
 const preload = path.join(__dirname, "../preload/index.mjs");
 const indexHtml = path.join(RENDERER_DIST, "index.html");
+
+const notesDir = path.join(process.env.APP_ROOT, "userData", "notes");
+function ensureNotesDir() {
+  if (!fs.existsSync(notesDir)) {
+    fs.mkdirSync(notesDir, { recursive: true });
+  }
+}
 
 let currentMode: "transparent" | "normal" | "hidden" = "normal";
 let currentCorner: "right" | "left" = "right";
@@ -136,7 +144,10 @@ async function createWindow(
   update(win);
 }
 
-app.whenReady().then(() => createWindow(currentMode));
+app.whenReady().then(() => {
+  ensureNotesDir();
+  createWindow(currentMode);
+});
 
 app.on("window-all-closed", () => {
   win = null;
@@ -332,3 +343,40 @@ const backToNormalMode = async () => {
   win.webContents.send("update-is-transparent", false); // Envia mensagem para atualizar o estado
 };
 ipcMain.handle("set-normal-mode", backToNormalMode);
+
+ipcMain.handle("notes-list", () => {
+  ensureNotesDir();
+  const files = fs
+    .readdirSync(notesDir)
+    .filter((f) => f.endsWith(".md"))
+    .map((f) => {
+      const stat = fs.statSync(path.join(notesDir, f));
+      return { title: path.basename(f, ".md"), mtime: stat.mtime.getTime() };
+    })
+    .sort((a, b) => b.mtime - a.mtime);
+  return files;
+});
+
+const sanitize = (t: string) => t.replace(/[^a-z0-9-_ ]/gi, "_");
+
+ipcMain.handle("notes-read", (_, title: string) => {
+  ensureNotesDir();
+  const file = path.join(notesDir, sanitize(title) + ".md");
+  try {
+    return fs.readFileSync(file, "utf8");
+  } catch {
+    return "";
+  }
+});
+
+ipcMain.handle("notes-save", (_, title: string, content: string) => {
+  ensureNotesDir();
+  const file = path.join(notesDir, sanitize(title) + ".md");
+  fs.writeFileSync(file, content, "utf8");
+});
+
+ipcMain.handle("notes-delete", (_, title: string) => {
+  ensureNotesDir();
+  const file = path.join(notesDir, sanitize(title) + ".md");
+  if (fs.existsSync(file)) fs.unlinkSync(file);
+});
