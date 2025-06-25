@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import {
+  faRightFromBracket,
+  faNoteSticky,
+  faCircle,
+} from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router";
 import { useSystemState } from "@/context/systemStateContext";
 
 interface HiddenCapyProps {
@@ -15,6 +20,7 @@ const HiddenCapy: React.FC<HiddenCapyProps> = ({
   handleHideCapy,
 }) => {
   const [showButton, setShowButton] = useState(false);
+  const navigate = useNavigate();
   const {
     currentCorner,
     handleMouseEnter,
@@ -72,20 +78,56 @@ const HiddenCapy: React.FC<HiddenCapyProps> = ({
         }}
       >
         {showButton && (
-          <button
-            className="absolute right-8 top-10 bg-gray-200 p-2 h-8 rounded-full shadow-md hover:bg-gray-300 rotate-180 z-20"
-            onClick={() => handleHideCapy("transparent")}
-            onMouseEnter={() => {
-              handleMouseEnter();
-              setShowButton(true);
-            }}
-            onMouseLeave={() => {
-              handleMouseLeave();
-              setShowButton(false);
-            }}
-          >
-            <FontAwesomeIcon icon={faRightFromBracket} />
-          </button>
+          <>
+            <button
+              className="absolute bg-gray-200 p-2 h-8 rounded-full shadow-md hover:bg-gray-300 rotate-180 z-20"
+              style={{ right: 28, top: -24 }}
+              onClick={() => {}}
+              onMouseEnter={() => {
+                handleMouseEnter();
+                setShowButton(true);
+              }}
+              onMouseLeave={() => {
+                handleMouseLeave();
+                setShowButton(false);
+              }}
+            >
+              <FontAwesomeIcon icon={faCircle} />
+            </button>
+            <button
+              className="absolute bg-gray-200 p-2 h-8 rounded-full shadow-md hover:bg-gray-300 rotate-180 z-20"
+              style={{ right: 14, top: -10 }}
+              onClick={() => {
+                handleHideCapy("normal");
+                navigate("/notes");
+              }}
+              onMouseEnter={() => {
+                handleMouseEnter();
+                setShowButton(true);
+              }}
+              onMouseLeave={() => {
+                handleMouseLeave();
+                setShowButton(false);
+              }}
+            >
+              <FontAwesomeIcon icon={faNoteSticky} />
+            </button>
+            <button
+              className="absolute bg-gray-200 p-2 h-8 rounded-full shadow-md hover:bg-gray-300 rotate-180 z-20"
+              style={{ right: 8, top: 10 }}
+              onClick={() => handleHideCapy("transparent")}
+              onMouseEnter={() => {
+                handleMouseEnter();
+                setShowButton(true);
+              }}
+              onMouseLeave={() => {
+                handleMouseLeave();
+                setShowButton(false);
+              }}
+            >
+              <FontAwesomeIcon icon={faRightFromBracket} />
+            </button>
+          </>
         )}
         <img
           src={hiddenCapibaraImage}

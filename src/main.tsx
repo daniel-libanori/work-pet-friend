@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import Home from "./screens/home/home";
 import Welcome from "./screens/welcome/welcome";
+import Notes from "./screens/notes/notes";
 import { BrowserRouter, Route, Routes } from "react-router";
 import { SystemStateProvider } from "./context/systemStateContext";
 
@@ -21,6 +22,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
           <Route path="/" element={<Welcome />} />
           <Route path="/home" element={<Home />} />
           <Route path="/closet" element={<Closet />} />
+          <Route path="/notes" element={<Notes />} />
           <Route path="/app" element={<App />} />
         </Routes>
       </BrowserRouter>
