@@ -141,8 +141,6 @@ const Closet: React.FC = () => {
           })}
         </div>
 
-        {/* floor */}
-        <div className="absolute bg-[#633000] w-full h-64 bottom-0" />
       </div>
     </div>
   );
