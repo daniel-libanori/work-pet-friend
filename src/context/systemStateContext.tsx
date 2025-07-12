@@ -17,6 +17,8 @@ interface SystemState {
   togglePosition: (mode: "hidden" | "transparent") => void;
   handleMinimize: () => void;
   handleClose: () => void;
+  getDataFromElectronStore: (dataName: string) => Promise<any>;
+  setDataToElectronStore: (dataName: string, data: any) => void
 }
 
 const SystemStateContext = createContext<SystemState | undefined>(undefined);
@@ -84,6 +86,17 @@ export const SystemStateProvider: React.FC<{ children: ReactNode }> = ({
     window.ipcRenderer.send("close-window");
   };
 
+  const getDataFromElectronStore = (dataName : string) => {
+    const data = window.ipcRenderer.invoke("get-data-from-electron-store",dataName);
+    return data;
+  };
+
+  const setDataToElectronStore = (dataName: string, data: any) => {
+    window.ipcRenderer.invoke("set-data-to-electron-store", dataName, data);
+  };
+
+
+
   return (
     <SystemStateContext.Provider
       value={{
@@ -97,6 +110,8 @@ export const SystemStateProvider: React.FC<{ children: ReactNode }> = ({
         togglePosition,
         handleMinimize,
         handleClose,
+        getDataFromElectronStore,
+        setDataToElectronStore,
       }}
     >
       {children}

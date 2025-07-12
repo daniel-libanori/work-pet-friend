@@ -14,7 +14,7 @@ import {
 interface HomeNormalProps {}
 
 const HomeNormal: React.FC<HomeNormalProps> = ({}) => {
-  const { toggleMode, handleMouseEnter, handleMouseLeave, toggleSize } =
+  const { toggleMode, handleMouseEnter, handleMouseLeave, toggleSize, setDataToElectronStore,getDataFromElectronStore } =
     useSystemState();
   const navigate = useNavigate();
 
@@ -65,7 +65,23 @@ const HomeNormal: React.FC<HomeNormalProps> = ({}) => {
             >
               Capivara Rangel
             </button>
+            
           </div>
+
+          <button
+            className="h-10 w-10 mb-5 bg-[#c08440] hover:bg-[#d69851] z-100"
+            onClick={()=> setDataToElectronStore("test", { name: "Capybarar" })}>
+              Set
+            </button>
+          <button
+            className="h-10 w-10 mb-5 bg-[#c08440] hover:bg-[#d69851] z-100"
+            onClick={async () => {
+              const data = await getDataFromElectronStore("test");
+              console.log(data);
+            }}
+          >
+            Get
+          </button>
 
           <div className="-mb-24">
             <div className="relative w-36 h-36">

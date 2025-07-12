@@ -13,6 +13,10 @@ import path from "node:path";
 import os from "node:os";
 import fs from "node:fs";
 import { update } from "./update";
+import ElectronStore from "electron-store";
+
+const store = new ElectronStore<any>();
+const enableDevTools = true
 
 const require = createRequire(import.meta.url);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -105,7 +109,9 @@ async function createWindow(
 
   if (VITE_DEV_SERVER_URL) {
     win.loadURL(VITE_DEV_SERVER_URL);
-    // win.webContents.openDevTools();
+    if(enableDevTools){
+      win.webContents.openDevTools();
+    }
   } else {
     win.loadFile(indexHtml);
   }
@@ -379,4 +385,13 @@ ipcMain.handle("notes-delete", (_, title: string) => {
   ensureNotesDir();
   const file = path.join(notesDir, sanitize(title) + ".md");
   if (fs.existsSync(file)) fs.unlinkSync(file);
+});
+
+ipcMain.handle("get-data-from-electron-store", (event, dataName: string) => {
+  return store.get(dataName);
+});
+
+ipcMain.handle("set-data-to-electron-store", (event, dataName: string, data: any) => {
+  store.set(dataName, data);
+  return true;
 });
